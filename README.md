@@ -1,6 +1,6 @@
 # File Converter GUI
 
-### Author: Sidartha Prastya. P
+**Author: Sidartha Prastya**
 
 This is a GUI for converting encoded (base64) file (input) -> csv -> pdf file (output).
 GUI is created using .NET Windows Form (Visual Studio 2022)
