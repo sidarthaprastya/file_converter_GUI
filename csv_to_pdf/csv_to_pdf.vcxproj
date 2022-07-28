@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="base64.cpp" />
-    <ClCompile Include="csv_to_pdf.cpp" />
     <ClCompile Include="convert.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

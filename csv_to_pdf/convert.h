@@ -8,6 +8,8 @@ extern "C" {
 	convert void decode_csv(char* input_file, char* output_file);
 
 	convert void delete_csv(char* filename);
+
+	convert void encode_csv(char* input_file, char* output_file);
 }
 
 //void decode_csv(char* input_file, char* output_file);

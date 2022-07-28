@@ -25,6 +25,9 @@ namespace file_converter
         [DllImport(CppConvertDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void delete_csv(string filename);
 
+        [DllImport(CppConvertDLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void encode_csv(string input_file, string output_file);
+
         public static string notification = "";
 
         private static bool valid_encoded_path, valid_filename, valid_folder_path;
@@ -39,6 +42,7 @@ namespace file_converter
             valid_folder_path = false;
 
             btn_convert.Enabled = false;
+            combo_conv.SelectedItem = "Decode";
             //option.ConvertDateTimeData = true;
         }
 
@@ -46,6 +50,9 @@ namespace file_converter
         {
             using(OpenFileDialog ofd = new OpenFileDialog())
             {
+                
+                ofd.Filter = "csv files (*.csv)|*.csv|txt files (*.txt)|*.txt";
+            
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     txt_path.Text = ofd.FileName;
@@ -69,25 +76,40 @@ namespace file_converter
             try
             {
                 string folder_path = txt_folder.Text.Replace("\\", "/");
-                string csv_path = $"{folder_path}/{txt_filename.Text}.csv";
-                string encoded_path = txt_path.Text.Replace("\\", "/");
+                
+                string input_path = txt_path.Text.Replace("\\", "/");
                 //encoded_path;
-                Debug.Write(csv_path);
-                Debug.Write(encoded_path);
-                decode_csv(encoded_path, csv_path);
-                Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook($"{txt_folder.Text}\\{txt_filename.Text}.csv");
+                //Debug.Write(csv_path);
+                //Debug.Write(encoded_path);
 
-                Worksheet worksheet = workbook.Worksheets[0];
+                if(combo_conv.SelectedItem == "Decode")
+                {
+                    string output_path = $"{folder_path}/{txt_filename.Text}_temp.csv";
 
-                Column column = worksheet.Cells.Columns[0];
-                //Style style1 = workbook.CreateStyle();
-                //StyleFlag flag = new StyleFlag();
-                column.Width = 20;
+                    decode_csv(input_path, output_path);
 
-                workbook.Save($"{txt_folder.Text}\\{txt_filename.Text}.pdf", Aspose.Cells.SaveFormat.Pdf);
-                delete_csv(csv_path);
+                    Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook($"{output_path}");
 
-                notification = $"File is successfully converted at\n{txt_folder.Text}\\{txt_filename.Text}.pdf";
+                    Worksheet worksheet = workbook.Worksheets[0];
+
+                    Column column = worksheet.Cells.Columns[0];
+                    //Style style1 = workbook.CreateStyle();
+                    //StyleFlag flag = new StyleFlag();
+                    column.Width = 20;
+
+                    workbook.Save($"{txt_folder.Text}\\{txt_filename.Text}.pdf", Aspose.Cells.SaveFormat.Pdf);
+                    delete_csv(output_path);
+
+                    notification = $"File is successfully converted at\n{txt_folder.Text}\\{txt_filename.Text}.pdf";
+                }
+                else
+                {
+                    string output_path = $"{folder_path}/{txt_filename.Text}.csv";
+
+                    encode_csv(input_path, output_path);
+                    notification = $"File is successfully converted at\n{txt_folder.Text}\\{txt_filename.Text}.csv";
+                }
+                
                 bool popup_loop = true;
                 while (popup_loop)
                 {
@@ -140,6 +162,7 @@ namespace file_converter
                 btn_convert.Enabled = false;
             }
         }
+
 
         private void txt_filename_TextChanged(object sender, EventArgs e)
         {

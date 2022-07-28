@@ -21,3 +21,18 @@ void decode_csv(char* input_file, char* output_file) {
 void delete_csv(char* filename){
 	remove(filename);
 }
+
+void encode_csv(char* input_file, char* output_file) {
+	fstream encoded_file, decoded_file;
+	encoded_file.open(output_file, ios::out);
+	decoded_file.open(input_file, ios::in);
+	if (decoded_file.is_open()) {
+		string encoded, decoded;
+		while (getline(decoded_file, decoded)) {
+			encoded = base64_encode(decoded);
+			encoded_file << encoded << "\n";
+		}
+		encoded_file.close();
+		decoded_file.close();
+	}
+}
