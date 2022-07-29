@@ -18,7 +18,8 @@ namespace file_converter
 
     public partial class file_converter : Form
     {
-        public const string CppConvertDLL = @".\csv_to_pdf.dll";
+        
+        public const string CppConvertDLL = "csv_to_pdf.dll";
         [DllImport(CppConvertDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void decode_csv(string input_file, string output_file);
 
@@ -50,13 +51,15 @@ namespace file_converter
         {
             using(OpenFileDialog ofd = new OpenFileDialog())
             {
-                
+                //string execPath = AppDomain.CurrentDomain.BaseDirectory;
+                Debug.WriteLine($"{AppDomain.CurrentDomain.BaseDirectory}csv_to_pdf.dll");
                 ofd.Filter = "csv files (*.csv)|*.csv|txt files (*.txt)|*.txt";
             
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     txt_path.Text = ofd.FileName;
                 }
+
             }
         }
 
