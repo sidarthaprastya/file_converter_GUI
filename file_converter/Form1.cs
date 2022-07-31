@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Aspose.Cells;
-using System.Media;
+﻿using Aspose.Cells;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace file_converter
 {
-    
+
 
     public partial class file_converter : Form
     {
-        
+
         public const string CppConvertDLL = "csv_to_pdf.dll";
         [DllImport(CppConvertDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void decode_csv(string input_file, string output_file);
@@ -49,12 +41,12 @@ namespace file_converter
 
         private void btn_browse_Click(object sender, EventArgs e)
         {
-            using(OpenFileDialog ofd = new OpenFileDialog())
+            using (OpenFileDialog ofd = new OpenFileDialog())
             {
                 //string execPath = AppDomain.CurrentDomain.BaseDirectory;
                 Debug.WriteLine($"{AppDomain.CurrentDomain.BaseDirectory}csv_to_pdf.dll");
                 ofd.Filter = "csv files (*.csv)|*.csv|txt files (*.txt)|*.txt";
-            
+
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     txt_path.Text = ofd.FileName;
@@ -65,9 +57,9 @@ namespace file_converter
 
         private void btn_folder_Click(object sender, EventArgs e)
         {
-            using(FolderBrowserDialog fbd = new FolderBrowserDialog())
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
-                if(fbd.ShowDialog() == DialogResult.OK)
+                if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     txt_folder.Text = fbd.SelectedPath;
                 }
@@ -79,13 +71,13 @@ namespace file_converter
             try
             {
                 string folder_path = txt_folder.Text.Replace("\\", "/");
-                
+
                 string input_path = txt_path.Text.Replace("\\", "/");
                 //encoded_path;
                 //Debug.Write(csv_path);
                 //Debug.Write(encoded_path);
 
-                if(combo_conv.SelectedItem == "Decode")
+                if (combo_conv.SelectedItem == "Decode")
                 {
                     string output_path = $"{folder_path}/{txt_filename.Text}_temp.csv";
 
@@ -112,20 +104,20 @@ namespace file_converter
                     encode_csv(input_path, output_path);
                     notification = $"File is successfully converted at\n{txt_folder.Text}\\{txt_filename.Text}.csv";
                 }
-                
+
                 bool popup_loop = true;
                 while (popup_loop)
                 {
                     popup notif_window = new popup();
                     DialogResult dialogResult = notif_window.ShowDialog();
-                    
+
                     if (dialogResult == DialogResult.OK)
                     {
                         popup_loop = false;
                     }
                     notif_window.Dispose();
                 }
-                
+
 
             }
             catch (Exception err)
@@ -136,19 +128,19 @@ namespace file_converter
                 {
                     popup notif_window = new popup();
                     DialogResult dialogResult = notif_window.ShowDialog();
-                    
+
                     if (dialogResult == DialogResult.OK)
                     {
                         popup_loop = false;
                     }
                 }
             }
-            
+
         }
 
         private void txt_path_TextChanged(object sender, EventArgs e)
         {
-            if(txt_path.Text.Length != 0)
+            if (txt_path.Text.Length != 0)
             {
                 valid_encoded_path = true;
             }
@@ -156,7 +148,7 @@ namespace file_converter
             {
                 valid_encoded_path = false;
             }
-            if(valid_encoded_path && valid_filename && valid_folder_path)
+            if (valid_encoded_path && valid_filename && valid_folder_path)
             {
                 btn_convert.Enabled = true;
             }
@@ -169,7 +161,7 @@ namespace file_converter
 
         private void txt_filename_TextChanged(object sender, EventArgs e)
         {
-            if(txt_filename.Text.Length != 0)
+            if (txt_filename.Text.Length != 0)
             {
                 valid_filename = true;
             }
